@@ -1,0 +1,17 @@
+CC = clang
+LLC = llc
+LIBBPF = libbpf.a
+
+CFLAGS = -I/usr/include/bpf -I/opt/libbpf/src/ -Wall
+LLC_FLAGS = -march=bpf -filetype=obj
+BPFOBJ = ebpf.o
+
+ebpf_prog: $(BPFOBJ)
+	$(CC) -o $@ $^ -L/opt/libbpf/src/ -l:$(LIBBPF)
+
+$(BPFOBJ): main.bpf.c
+	$(CC) $(CFLAGS) -O2 -emit-llvm -target bpf -c $< -o - | $(LLC) $(LLC_FLAGS) -o $@
+
+.PHONY: clean
+clean:
+	rm -f *.o ebpf_prog

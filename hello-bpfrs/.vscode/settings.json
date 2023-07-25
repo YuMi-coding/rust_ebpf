@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "pkt_cls.h": "c",
+        "*.bb": "c"
+    }
+}
